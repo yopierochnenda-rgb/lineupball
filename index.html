@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>OBS Volleyball Overlay - Pro Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <title>OBS Volleyball Overlay - Pro Sport Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,800;0,900;1,900&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -13,206 +13,229 @@
             font-family: 'Montserrat', sans-serif;
             height: 100vh;
             display: flex;
-            justify-content: flex-end;
+            justify-content: center;
             align-items: center;
-            padding: 40px;
+            /* Padding atas dilebihkan agar judul tim tidak kepotong di kanvas vertikal */
+            padding: 80px 20px 20px 20px; 
             overflow: hidden;
             color: #ffffff;
         }
 
         .status-box {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(10, 15, 30, 0.7);
+            top: 15px;
+            left: 15px;
+            background: rgba(10, 15, 30, 0.85);
             backdrop-filter: blur(10px);
-            padding: 10px 20px;
-            border-left: 4px solid #f39c12;
+            padding: 8px 14px;
+            border-left: 4px solid #ffaa00;
             border-radius: 4px;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
+            z-index: 10;
         }
         .pin-code {
             font-family: 'Oswald', sans-serif;
-            font-size: 1.5rem;
-            color: #f1c40f;
+            font-size: 1.2rem;
+            color: #ffaa00;
         }
 
         .graphic-container {
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
+            align-items: center;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
+            transform: scale(0.92);
         }
 
+        /* Desain Tim Sporty Bergaransi Garang */
         .team-header {
-            background: linear-gradient(90deg, #1e3c72, #2a5298);
-            color: #fff;
-            padding: 10px 30px;
+            background: linear-gradient(135deg, #0b132b, #1c2541, #3a506b);
+            color: #ffffff;
+            padding: 12px 20px;
             font-family: 'Oswald', sans-serif;
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            border-radius: 8px 8px 0 0;
-            width: 480px;
+            letter-spacing: 3px;
+            border-radius: 10px 10px 0 0;
+            width: 380px;
             text-align: center;
-            border: 2px solid rgba(255,255,255,0.2);
-            border-bottom: none;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.4);
+            border: 2px solid #ffaa00;
+            border-bottom: 3px solid #ffaa00;
+            box-shadow: 0 -5px 20px rgba(255, 170, 0, 0.3);
+            position: relative;
+        }
+        
+        .team-header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0; right: 0;
+            height: 3px;
+            background: #ffaa00;
         }
 
         .court-title {
-            background: linear-gradient(90deg, #e67e22, #d35400);
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
             color: #fff;
-            padding: 6px 30px;
+            padding: 5px 20px;
             font-family: 'Oswald', sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            width: 480px;
+            letter-spacing: 3px;
+            width: 380px;
             text-align: center;
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+            margin-top: -2px;
+            z-index: 3;
         }
 
+        /* Lapangan Sporty Style */
         .court {
-            width: 480px;
-            height: 440px;
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.75), rgba(2, 6, 23, 0.85));
+            width: 380px;
+            height: 360px;
+            background: linear-gradient(135deg, rgba(11, 19, 43, 0.9), rgba(5, 8, 20, 0.95));
             backdrop-filter: blur(12px);
-            border-left: 3px solid rgba(255, 255, 255, 0.2);
-            border-right: 3px solid rgba(255, 255, 255, 0.2);
+            border-left: 3px solid #3a506b;
+            border-right: 3px solid #3a506b;
             position: relative;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(2, 1fr);
-            padding: 12px;
-            gap: 12px;
+            padding: 10px;
+            gap: 10px;
         }
 
+        /* Garis Serang Lapangan Voli */
         .court::before {
             content: '';
             position: absolute;
             top: 33.33%;
             left: 0; right: 0;
             height: 3px;
-            background-color: #3498db;
-            box-shadow: 0 0 10px #3498db;
+            background-color: #00e5ff;
+            box-shadow: 0 0 12px #00e5ff;
             z-index: 1;
         }
 
+        /* Garis Net Animasi */
         .net {
             position: absolute;
             top: -6px; left: -10px; right: -10px;
             height: 12px;
-            background: repeating-linear-gradient(90deg, #bdc3c7, #bdc3c7 4px, #2c3e50 4px, #2c3e50 8px);
+            background: repeating-linear-gradient(90deg, #ffffff, #ffffff 4px, #1c2541 4px, #1c2541 8px);
             border-radius: 6px;
             z-index: 5;
+            box-shadow: 0 2px 8px rgba(0,229,255,0.5);
         }
 
         .player-spot {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-left: 4px solid transparent;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 6px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 6px;
+            padding: 4px;
             z-index: 2;
-            transition: all 0.3s ease;
             position: relative;
+            transition: all 0.3s;
         }
 
         .pos-number { 
             font-family: 'Oswald', sans-serif;
-            font-size: 0.7rem; 
-            color: #95a5a6; 
-            letter-spacing: 1px;
+            font-size: 0.65rem; 
+            color: #8d99ae; 
+            letter-spacing: 1.5px;
             margin-bottom: 2px;
         }
 
-        /* Layout isi pemain (Nomor + Nama) */
         .player-info {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 5px;
             width: 100%;
         }
 
+        /* Nomor Punggung Jersey Style */
         .player-number {
             font-family: 'Oswald', sans-serif;
-            background: rgba(241, 196, 15, 0.2);
-            color: #f1c40f;
-            border: 1px solid #f1c40f;
-            font-size: 0.85rem;
+            background: #ffaa00;
+            color: #0b132b;
+            font-size: 0.8rem;
             font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            display: none; /* Disembunyikan dulu jika kosong */
+            padding: 1px 5px;
+            border-radius: 3px;
+            display: none;
+            box-shadow: 0 0 8px rgba(255,170,0,0.5);
         }
 
         .name { 
             font-family: 'Montserrat', sans-serif;
-            font-weight: 800; 
-            font-size: 0.95rem; 
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8); 
+            font-weight: 900; 
+            font-size: 0.82rem; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.9); 
             word-break: break-word;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
+        /* Ketika kotak diisi pemain, beri efek menyala biru sporty */
         .player-spot.filled {
-            background: linear-gradient(145deg, rgba(41, 128, 185, 0.8), rgba(44, 62, 80, 0.9));
-            border-color: #3498db;
-            border-left: 4px solid #f1c40f;
+            background: linear-gradient(135deg, rgba(0, 119, 182, 0.75), rgba(3, 4, 94, 0.85));
+            border: 1px solid #00e5ff;
+            box-shadow: inset 0 0 10px rgba(0,229,255,0.2);
         }
-        .player-spot.filled .pos-number { color: #f1c40f; }
+        .player-spot.filled .pos-number { color: #00e5ff; }
 
+        /* Bagian Cadangan & Libero */
         .extra-section {
-            width: 480px;
-            background: rgba(15, 23, 42, 0.85);
+            width: 380px;
+            background: rgba(11, 19, 43, 0.95);
             backdrop-filter: blur(12px);
-            border: 3px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid #3a506b;
             border-top: none;
-            border-radius: 0 0 8px 8px;
-            padding: 10px 15px;
+            border-radius: 0 0 10px 10px;
+            padding: 8px 12px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
 
         .extra-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
-            background: rgba(0,0,0,0.4);
+            font-size: 0.8rem;
+            background: rgba(0, 0, 0, 0.5);
             padding: 6px 12px;
             border-radius: 4px;
+            border-left: 3px solid #ff4b2b;
         }
 
         .extra-row .label {
             font-family: 'Oswald', sans-serif;
-            color: #fca311;
+            color: #ffaa00;
             font-weight: bold;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         .extra-row-info {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .extra-number {
             font-family: 'Oswald', sans-serif;
-            background: rgba(241, 196, 15, 0.2);
-            color: #f1c40f;
-            border: 1px solid #f1c40f;
+            background: #ffaa00;
+            color: #0b132b;
             font-size: 0.75rem;
             font-weight: 700;
             padding: 1px 5px;
@@ -221,8 +244,9 @@
         }
 
         .extra-row .val {
-            font-weight: bold;
+            font-weight: 900;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         #spot-4 { grid-column: 1; grid-row: 1; }
@@ -236,7 +260,7 @@
 <body>
 
     <div class="status-box">
-        REMOTE: <span id="status-text" style="color: #e74c3c;">DISCONNECTED</span><br>
+        REMOTE: <span id="status-text" style="color: #ff4b2b;">DISCONNECTED</span><br>
         PIN: <span class="pin-code" id="pin-display">....</span>
     </div>
 
@@ -247,7 +271,6 @@
         <div class="court">
             <div class="net"></div>
             
-            <!-- Posisi 4 -->
             <div class="player-spot" id="spot-4">
                 <span class="pos-number">POS 4</span>
                 <div class="player-info">
@@ -255,7 +278,6 @@
                     <span class="name" id="name-4">-</span>
                 </div>
             </div>
-            <!-- Posisi 3 -->
             <div class="player-spot" id="spot-3">
                 <span class="pos-number">POS 3</span>
                 <div class="player-info">
@@ -263,7 +285,6 @@
                     <span class="name" id="name-3">-</span>
                 </div>
             </div>
-            <!-- Posisi 2 -->
             <div class="player-spot" id="spot-2">
                 <span class="pos-number">POS 2</span>
                 <div class="player-info">
@@ -271,7 +292,6 @@
                     <span class="name" id="name-2">-</span>
                 </div>
             </div>
-            <!-- Posisi 5 -->
             <div class="player-spot" id="spot-5">
                 <span class="pos-number">POS 5</span>
                 <div class="player-info">
@@ -279,7 +299,6 @@
                     <span class="name" id="name-5">-</span>
                 </div>
             </div>
-            <!-- Posisi 6 -->
             <div class="player-spot" id="spot-6">
                 <span class="pos-number">POS 6</span>
                 <div class="player-info">
@@ -287,7 +306,6 @@
                     <span class="name" id="name-6">-</span>
                 </div>
             </div>
-            <!-- Posisi 1 -->
             <div class="player-spot" id="spot-1">
                 <span class="pos-number">POS 1</span>
                 <div class="player-info">
@@ -331,7 +349,7 @@
         peer.on('connection', (conn) => {
             const statusText = document.getElementById('status-text');
             statusText.textContent = 'CONNECTED';
-            statusText.style.color = '#2ecc71';
+            statusText.style.color = '#00e5ff';
 
             conn.on('data', (data) => {
                 if (data.type === 'team') {
@@ -342,13 +360,11 @@
                 if (data.type === 'name') {
                     const displayField = document.getElementById(`name-${data.pos}`);
                     const spotDisplay = document.getElementById(`spot-${data.pos}`);
-                    const extraField = document.getElementById(`name-${data.pos}`); // Untuk cadangan/libero
 
                     if (displayField) {
                         const nama = data.val.trim();
                         displayField.textContent = nama === '' ? '-' : nama;
 
-                        // Khusus untuk kotak lapangan utama (1-6)
                         if (spotDisplay) {
                             if (nama !== '') {
                                 spotDisplay.classList.add('filled');
@@ -360,7 +376,6 @@
                 }
 
                 if (data.type === 'num') {
-                    // Cari apakah ini nomor utama (1-6) atau extra (libero/sub)
                     let numField = document.getElementById(`num-${data.pos}`);
                     if (numField) {
                         const no = data.val.trim();
@@ -377,7 +392,7 @@
             
             conn.on('close', () => {
                 statusText.textContent = 'DISCONNECTED';
-                statusText.style.color = '#e74c3c';
+                statusText.style.color = '#ff4b2b';
             });
         });
     </script>
