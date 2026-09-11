@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Line-Up Voli</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: #fff;
+            padding: 20px;
+        }
+        h2 { text-align: center; color: #fca311; margin-bottom: 15px; }
+        .connect-box {
+            background: #222;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: none;
+            font-size: 1rem;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #fca311;
+            border: none;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .form-group { margin-bottom: 12px; }
+        label { font-size: 0.85rem; font-weight: bold; color: #fca311; }
+        #controls { display: none; }
+        hr { border-color: #333; margin: 15px 0; }
+    </style>
+</head>
+<body>
+
+    <h2>REMOTE KONTROL VOLI</h2>
+
+    <div class="connect-box" id="login-box">
+        <label style="color:#fff;">Masukkan PIN dari Layar OBS:</label>
+        <input type="number" id="pin-input" placeholder="Contoh: 1234">
+        <button id="btn-connect">Hubungkan</button>
+        <p id="status-msg" style="margin-top: 10px; font-size: 0.85rem; color: #aaa;"></p>
+    </div>
+
+    <div id="controls">
+        <div class="form-group">
+            <label>NAMA TIM / KLUB:</label>
+            <input type="text" id="input-team" placeholder="Contoh: GARUDA VC">
+        </div>
+        
+        <hr>
+
+        <div class="form-group"><label>POSISI 4 (Kiri Depan):</label><input type="text" id="input-4" placeholder="Nama..."></div>
+        <div class="form-group"><label>POSISI 3 (Tengah Depan):</label><input type="text" id="input-3" placeholder="Nama..."></div>
+        <div class="form-group"><label>POSISI 2 (Kanan Depan):</label><input type="text" id="input-2" placeholder="Nama..."></div>
+        <div class="form-group"><label>POSISI 5 (Kiri Belakang):</label><input type="text" id="input-5" placeholder="Nama..."></div>
+        <div class="form-group"><label>POSISI 6 (Tengah Belakang):</label><input type="text" id="input-6" placeholder="Nama..."></div>
+        <div class="form-group"><label>POSISI 1 (Server):</label><input type="text" id="input-1" placeholder="Nama..."></div>
+        
+        <hr>
+
+        <div class="form-group"><label>LIBERO:</label><input type="text" id="input-libero" placeholder="Nama Libero..."></div>
+        <div class="form-group"><label>CADANGAN 1:</label><input type="text" id="input-sub1" placeholder="Nama Cadangan..."></div>
+        <div class="form-group"><label>CADANGAN 2:</label><input type="text" id="input-sub2" placeholder="Nama Cadangan..."></div>
+    </div>
+
+    <script>
+        const peer = new Peer();
+        let conn = null;
+
+        document.getElementById('btn-connect').addEventListener('click', () => {
+            const pin = document.getElementById('pin-input').value;
+            const statusMsg = document.getElementById('status-msg');
+
+            if (!pin) { alert('Masukkan PIN!'); return; }
+
+            statusMsg.textContent = "Menghubungkan...";
+            conn = peer.connect(`volleyball-obs-${pin}`);
+
+            conn.on('open', () => {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('controls').style.display = 'block';
+            });
+
+            conn.on('error', () => {
+                statusMsg.textContent = "Gagal terhubung. Cek PIN!";
+            });
+        });
+
+        document.getElementById('input-team').addEventListener('input', (e) => {
+            if (conn && conn.open) conn.send({ pos: 'team', val: e.target.value });
+        });
+
+        const positions = [1, 2, 3, 4, 5, 6, 'libero', 'sub1', 'sub2'];
+        positions.forEach(pos => {
+            document.getElementById(`input-${pos}`).addEventListener('input', (e) => {
+                if (conn && conn.open) {
+                    conn.send({ pos: pos, val: e.target.value });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
