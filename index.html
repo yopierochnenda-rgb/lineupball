@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>OBS Volleyball Overlay - Pro Team Edition</title>
+    <title>OBS Volleyball Overlay - Pro Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
@@ -56,7 +56,7 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             border-radius: 8px 8px 0 0;
-            width: 460px;
+            width: 480px;
             text-align: center;
             border: 2px solid rgba(255,255,255,0.2);
             border-bottom: none;
@@ -72,12 +72,12 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
-            width: 460px;
+            width: 480px;
             text-align: center;
         }
 
         .court {
-            width: 460px;
+            width: 480px;
             height: 440px;
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.75), rgba(2, 6, 23, 0.85));
             backdrop-filter: blur(12px);
@@ -129,16 +129,37 @@
 
         .pos-number { 
             font-family: 'Oswald', sans-serif;
-            font-size: 0.75rem; 
+            font-size: 0.7rem; 
             color: #95a5a6; 
             letter-spacing: 1px;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
+        }
+
+        /* Layout isi pemain (Nomor + Nama) */
+        .player-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .player-number {
+            font-family: 'Oswald', sans-serif;
+            background: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+            border: 1px solid #f1c40f;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: none; /* Disembunyikan dulu jika kosong */
         }
 
         .name { 
             font-family: 'Montserrat', sans-serif;
             font-weight: 800; 
-            font-size: 1rem; 
+            font-size: 0.95rem; 
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8); 
             word-break: break-word;
             text-transform: uppercase;
@@ -152,7 +173,7 @@
         .player-spot.filled .pos-number { color: #f1c40f; }
 
         .extra-section {
-            width: 460px;
+            width: 480px;
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(12px);
             border: 3px solid rgba(255, 255, 255, 0.2);
@@ -181,6 +202,24 @@
             letter-spacing: 1px;
         }
 
+        .extra-row-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .extra-number {
+            font-family: 'Oswald', sans-serif;
+            background: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+            border: 1px solid #f1c40f;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 3px;
+            display: none;
+        }
+
         .extra-row .val {
             font-weight: bold;
             text-transform: uppercase;
@@ -207,26 +246,78 @@
         
         <div class="court">
             <div class="net"></div>
-            <div class="player-spot" id="spot-4"><span class="pos-number">POS 4</span><span class="name" id="name-4">-</span></div>
-            <div class="player-spot" id="spot-3"><span class="pos-number">POS 3</span><span class="name" id="name-3">-</span></div>
-            <div class="player-spot" id="spot-2"><span class="pos-number">POS 2</span><span class="name" id="name-2">-</span></div>
-            <div class="player-spot" id="spot-5"><span class="pos-number">POS 5</span><span class="name" id="name-5">-</span></div>
-            <div class="player-spot" id="spot-6"><span class="pos-number">POS 6</span><span class="name" id="name-6">-</span></div>
-            <div class="player-spot" id="spot-1"><span class="pos-number">POS 1</span><span class="name" id="name-1">-</span></div>
+            
+            <!-- Posisi 4 -->
+            <div class="player-spot" id="spot-4">
+                <span class="pos-number">POS 4</span>
+                <div class="player-info">
+                    <span class="player-number" id="num-4"></span>
+                    <span class="name" id="name-4">-</span>
+                </div>
+            </div>
+            <!-- Posisi 3 -->
+            <div class="player-spot" id="spot-3">
+                <span class="pos-number">POS 3</span>
+                <div class="player-info">
+                    <span class="player-number" id="num-3"></span>
+                    <span class="name" id="name-3">-</span>
+                </div>
+            </div>
+            <!-- Posisi 2 -->
+            <div class="player-spot" id="spot-2">
+                <span class="pos-number">POS 2</span>
+                <div class="player-info">
+                    <span class="player-number" id="num-2"></span>
+                    <span class="name" id="name-2">-</span>
+                </div>
+            </div>
+            <!-- Posisi 5 -->
+            <div class="player-spot" id="spot-5">
+                <span class="pos-number">POS 5</span>
+                <div class="player-info">
+                    <span class="player-number" id="num-5"></span>
+                    <span class="name" id="name-5">-</span>
+                </div>
+            </div>
+            <!-- Posisi 6 -->
+            <div class="player-spot" id="spot-6">
+                <span class="pos-number">POS 6</span>
+                <div class="player-info">
+                    <span class="player-number" id="num-6"></span>
+                    <span class="name" id="name-6">-</span>
+                </div>
+            </div>
+            <!-- Posisi 1 -->
+            <div class="player-spot" id="spot-1">
+                <span class="pos-number">POS 1</span>
+                <div class="player-info">
+                    <span class="player-number" id="num-1"></span>
+                    <span class="name" id="name-1">-</span>
+                </div>
+            </div>
         </div>
 
         <div class="extra-section">
             <div class="extra-row">
                 <span class="label">LIBERO</span>
-                <span class="val" id="name-libero">-</span>
+                <div class="extra-row-info">
+                    <span class="extra-number" id="num-libero"></span>
+                    <span class="val" id="name-libero">-</span>
+                </div>
             </div>
             <div class="extra-row">
                 <span class="label">CADANGAN 1</span>
-                <span class="val" id="name-sub1">-</span>
+                <div class="extra-row-info">
+                    <span class="extra-number" id="num-sub1"></span>
+                    <span class="val" id="name-sub1">-</span>
+                </div>
             </div>
             <div class="extra-row">
                 <span class="label">CADANGAN 2</span>
-                <span class="val" id="name-sub2">-</span>
+                <div class="extra-row-info">
+                    <span class="extra-number" id="num-sub2"></span>
+                    <span class="val" id="name-sub2">-</span>
+                </div>
             </div>
         </div>
     </div>
@@ -243,23 +334,42 @@
             statusText.style.color = '#2ecc71';
 
             conn.on('data', (data) => {
-                if (data.pos === 'team') {
+                if (data.type === 'team') {
                     document.getElementById('display-team-name').textContent = data.val.trim() === '' ? 'NAMA TIM / KLUB' : data.val.toUpperCase();
                     return;
                 }
 
-                const displayField = document.getElementById(`name-${data.pos}`);
-                const spotDisplay = document.getElementById(`spot-${data.pos}`);
+                if (data.type === 'name') {
+                    const displayField = document.getElementById(`name-${data.pos}`);
+                    const spotDisplay = document.getElementById(`spot-${data.pos}`);
+                    const extraField = document.getElementById(`name-${data.pos}`); // Untuk cadangan/libero
 
-                if (displayField) {
-                    const nama = data.val.trim();
-                    displayField.textContent = nama === '' ? '-' : nama;
+                    if (displayField) {
+                        const nama = data.val.trim();
+                        displayField.textContent = nama === '' ? '-' : nama;
 
-                    if (spotDisplay) {
-                        if (nama !== '') {
-                            spotDisplay.classList.add('filled');
+                        // Khusus untuk kotak lapangan utama (1-6)
+                        if (spotDisplay) {
+                            if (nama !== '') {
+                                spotDisplay.classList.add('filled');
+                            } else {
+                                spotDisplay.classList.remove('filled');
+                            }
+                        }
+                    }
+                }
+
+                if (data.type === 'num') {
+                    // Cari apakah ini nomor utama (1-6) atau extra (libero/sub)
+                    let numField = document.getElementById(`num-${data.pos}`);
+                    if (numField) {
+                        const no = data.val.trim();
+                        if (no !== '') {
+                            numField.textContent = no;
+                            numField.style.display = 'inline-block';
                         } else {
-                            spotDisplay.classList.remove('filled');
+                            numField.textContent = '';
+                            numField.style.display = 'none';
                         }
                     }
                 }
