@@ -23,9 +23,8 @@
         }
         input[type="number"], input[type="text"] {
             width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            margin-bottom: 12px;
+            padding: 10px;
+            margin-top: 4px;
             border-radius: 6px;
             border: none;
             font-size: 1rem;
@@ -39,9 +38,22 @@
             font-size: 1rem;
             border-radius: 6px;
             cursor: pointer;
+            margin-top: 10px;
         }
-        .form-group { margin-bottom: 12px; }
-        label { font-size: 0.85rem; font-weight: bold; color: #fca311; }
+        .form-group { 
+            margin-bottom: 12px; 
+            background: #1a1a1a; 
+            padding: 10px; 
+            border-radius: 6px;
+            border: 1px solid #333;
+        }
+        label { font-size: 0.8rem; font-weight: bold; color: #fca311; display: block; margin-bottom: 2px;}
+        .inputs-row {
+            display: flex;
+            gap: 8px;
+        }
+        .inputs-row input.no-input { width: 30%; }
+        .inputs-row input.name-input { width: 70%; }
         #controls { display: none; }
         hr { border-color: #333; margin: 15px 0; }
     </style>
@@ -51,7 +63,7 @@
     <h2>REMOTE KONTROL VOLI</h2>
 
     <div class="connect-box" id="login-box">
-        <label style="color:#fff;">Masukkan PIN dari Layar OBS:</label>
+        <label style="color:#fff; margin-bottom:8px;">Masukkan PIN dari Layar OBS:</label>
         <input type="number" id="pin-input" placeholder="Contoh: 1234">
         <button id="btn-connect">Hubungkan</button>
         <p id="status-msg" style="margin-top: 10px; font-size: 0.85rem; color: #aaa;"></p>
@@ -60,23 +72,78 @@
     <div id="controls">
         <div class="form-group">
             <label>NAMA TIM / KLUB:</label>
-            <input type="text" id="input-team" placeholder="Contoh: GARUDA VC">
+            <input type="text" id="input-team" placeholder="Contoh: GARUDA VC" style="width:100%;">
         </div>
         
         <hr>
 
-        <div class="form-group"><label>POSISI 4 (Kiri Depan):</label><input type="text" id="input-4" placeholder="Nama..."></div>
-        <div class="form-group"><label>POSISI 3 (Tengah Depan):</label><input type="text" id="input-3" placeholder="Nama..."></div>
-        <div class="form-group"><label>POSISI 2 (Kanan Depan):</label><input type="text" id="input-2" placeholder="Nama..."></div>
-        <div class="form-group"><label>POSISI 5 (Kiri Belakang):</label><input type="text" id="input-5" placeholder="Nama..."></div>
-        <div class="form-group"><label>POSISI 6 (Tengah Belakang):</label><input type="text" id="input-6" placeholder="Nama..."></div>
-        <div class="form-group"><label>POSISI 1 (Server):</label><input type="text" id="input-1" placeholder="Nama..."></div>
+        <!-- Template Posisi (No Punggung + Nama) -->
+        <div class="form-group">
+            <label>POSISI 4 (Kiri Depan):</label>
+            <div class="inputs-row">
+                <input type="number" id="num-4" class="no-input" placeholder="No">
+                <input type="text" id="name-4" class="name-input" placeholder="Nama Pemain">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>POSISI 3 (Tengah Depan):</label>
+            <div class="inputs-row">
+                <input type="number" id="num-3" class="no-input" placeholder="No">
+                <input type="text" id="name-3" class="name-input" placeholder="Nama Pemain">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>POSISI 2 (Kanan Depan):</label>
+            <div class="inputs-row">
+                <input type="number" id="num-2" class="no-input" placeholder="No">
+                <input type="text" id="name-2" class="name-input" placeholder="Nama Pemain">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>POSISI 5 (Kiri Belakang):</label>
+            <div class="inputs-row">
+                <input type="number" id="num-5" class="no-input" placeholder="No">
+                <input type="text" id="name-5" class="name-input" placeholder="Nama Pemain">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>POSISI 6 (Tengah Belakang):</label>
+            <div class="inputs-row">
+                <input type="number" id="num-6" class="no-input" placeholder="No">
+                <input type="text" id="name-6" class="name-input" placeholder="Nama Pemain">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>POSISI 1 (Server):</label>
+            <div class="inputs-row">
+                <input type="number" id="num-1" class="no-input" placeholder="No">
+                <input type="text" id="name-1" class="name-input" placeholder="Nama Pemain">
+            </div>
+        </div>
         
         <hr>
 
-        <div class="form-group"><label>LIBERO:</label><input type="text" id="input-libero" placeholder="Nama Libero..."></div>
-        <div class="form-group"><label>CADANGAN 1:</label><input type="text" id="input-sub1" placeholder="Nama Cadangan..."></div>
-        <div class="form-group"><label>CADANGAN 2:</label><input type="text" id="input-sub2" placeholder="Nama Cadangan..."></div>
+        <div class="form-group">
+            <label>LIBERO:</label>
+            <div class="inputs-row">
+                <input type="number" id="num-libero" class="no-input" placeholder="No">
+                <input type="text" id="name-libero" class="name-input" placeholder="Nama Libero">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>CADANGAN 1:</label>
+            <div class="inputs-row">
+                <input type="number" id="num-sub1" class="no-input" placeholder="No">
+                <input type="text" id="name-sub1" class="name-input" placeholder="Nama Cadangan">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>CADANGAN 2:</label>
+            <div class="inputs-row">
+                <input type="number" id="num-sub2" class="no-input" placeholder="No">
+                <input type="text" id="name-sub2" class="name-input" placeholder="Nama Cadangan">
+            </div>
+        </div>
     </div>
 
     <script>
@@ -102,15 +169,22 @@
             });
         });
 
+        // Kirim Tim
         document.getElementById('input-team').addEventListener('input', (e) => {
-            if (conn && conn.open) conn.send({ pos: 'team', val: e.target.value });
+            if (conn && conn.open) conn.send({ type: 'team', val: e.target.value });
         });
 
+        // Kirim Nama & Nomor Punggung
         const positions = [1, 2, 3, 4, 5, 6, 'libero', 'sub1', 'sub2'];
         positions.forEach(pos => {
-            document.getElementById(`input-${pos}`).addEventListener('input', (e) => {
+            document.getElementById(`name-${pos}`).addEventListener('input', (e) => {
                 if (conn && conn.open) {
-                    conn.send({ pos: pos, val: e.target.value });
+                    conn.send({ type: 'name', pos: pos, val: e.target.value });
+                }
+            });
+            document.getElementById(`num-${pos}`).addEventListener('input', (e) => {
+                if (conn && conn.open) {
+                    conn.send({ type: 'num', pos: pos, val: e.target.value });
                 }
             });
         });
