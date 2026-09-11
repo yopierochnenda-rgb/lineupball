@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>OBS Volleyball Overlay - Pro Team Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: transparent;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 40px;
+            overflow: hidden;
+            color: #ffffff;
+        }
+
+        .status-box {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(10, 15, 30, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-left: 4px solid #f39c12;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .pin-code {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.5rem;
+            color: #f1c40f;
+        }
+
+        .graphic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
+        }
+
+        .team-header {
+            background: linear-gradient(90deg, #1e3c72, #2a5298);
+            color: #fff;
+            padding: 10px 30px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-radius: 8px 8px 0 0;
+            width: 460px;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-bottom: none;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.4);
+        }
+
+        .court-title {
+            background: linear-gradient(90deg, #e67e22, #d35400);
+            color: #fff;
+            padding: 6px 30px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            width: 460px;
+            text-align: center;
+        }
+
+        .court {
+            width: 460px;
+            height: 440px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.75), rgba(2, 6, 23, 0.85));
+            backdrop-filter: blur(12px);
+            border-left: 3px solid rgba(255, 255, 255, 0.2);
+            border-right: 3px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            padding: 12px;
+            gap: 12px;
+        }
+
+        .court::before {
+            content: '';
+            position: absolute;
+            top: 33.33%;
+            left: 0; right: 0;
+            height: 3px;
+            background-color: #3498db;
+            box-shadow: 0 0 10px #3498db;
+            z-index: 1;
+        }
+
+        .net {
+            position: absolute;
+            top: -6px; left: -10px; right: -10px;
+            height: 12px;
+            background: repeating-linear-gradient(90deg, #bdc3c7, #bdc3c7 4px, #2c3e50 4px, #2c3e50 8px);
+            border-radius: 6px;
+            z-index: 5;
+        }
+
+        .player-spot {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 4px solid transparent;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6px;
+            z-index: 2;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pos-number { 
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.75rem; 
+            color: #95a5a6; 
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+        }
+
+        .name { 
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800; 
+            font-size: 1rem; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8); 
+            word-break: break-word;
+            text-transform: uppercase;
+        }
+
+        .player-spot.filled {
+            background: linear-gradient(145deg, rgba(41, 128, 185, 0.8), rgba(44, 62, 80, 0.9));
+            border-color: #3498db;
+            border-left: 4px solid #f1c40f;
+        }
+        .player-spot.filled .pos-number { color: #f1c40f; }
+
+        .extra-section {
+            width: 460px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .extra-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            background: rgba(0,0,0,0.4);
+            padding: 6px 12px;
+            border-radius: 4px;
+        }
+
+        .extra-row .label {
+            font-family: 'Oswald', sans-serif;
+            color: #fca311;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .extra-row .val {
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        #spot-4 { grid-column: 1; grid-row: 1; }
+        #spot-3 { grid-column: 2; grid-row: 1; }
+        #spot-2 { grid-column: 3; grid-row: 1; }
+        #spot-5 { grid-column: 1; grid-row: 2; }
+        #spot-6 { grid-column: 2; grid-row: 2; }
+        #spot-1 { grid-column: 3; grid-row: 2; }
+    </style>
+</head>
+<body>
+
+    <div class="status-box">
+        REMOTE: <span id="status-text" style="color: #e74c3c;">DISCONNECTED</span><br>
+        PIN: <span class="pin-code" id="pin-display">....</span>
+    </div>
+
+    <div class="graphic-container">
+        <div class="team-header" id="display-team-name">NAMA TIM / KLUB</div>
+        <div class="court-title">STARTING LINE-UP</div>
+        
+        <div class="court">
+            <div class="net"></div>
+            <div class="player-spot" id="spot-4"><span class="pos-number">POS 4</span><span class="name" id="name-4">-</span></div>
+            <div class="player-spot" id="spot-3"><span class="pos-number">POS 3</span><span class="name" id="name-3">-</span></div>
+            <div class="player-spot" id="spot-2"><span class="pos-number">POS 2</span><span class="name" id="name-2">-</span></div>
+            <div class="player-spot" id="spot-5"><span class="pos-number">POS 5</span><span class="name" id="name-5">-</span></div>
+            <div class="player-spot" id="spot-6"><span class="pos-number">POS 6</span><span class="name" id="name-6">-</span></div>
+            <div class="player-spot" id="spot-1"><span class="pos-number">POS 1</span><span class="name" id="name-1">-</span></div>
+        </div>
+
+        <div class="extra-section">
+            <div class="extra-row">
+                <span class="label">LIBERO</span>
+                <span class="val" id="name-libero">-</span>
+            </div>
+            <div class="extra-row">
+                <span class="label">CADANGAN 1</span>
+                <span class="val" id="name-sub1">-</span>
+            </div>
+            <div class="extra-row">
+                <span class="label">CADANGAN 2</span>
+                <span class="val" id="name-sub2">-</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const randomPin = Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('pin-display').textContent = randomPin;
+
+        const peer = new Peer(`volleyball-obs-${randomPin}`);
+
+        peer.on('connection', (conn) => {
+            const statusText = document.getElementById('status-text');
+            statusText.textContent = 'CONNECTED';
+            statusText.style.color = '#2ecc71';
+
+            conn.on('data', (data) => {
+                if (data.pos === 'team') {
+                    document.getElementById('display-team-name').textContent = data.val.trim() === '' ? 'NAMA TIM / KLUB' : data.val.toUpperCase();
+                    return;
+                }
+
+                const displayField = document.getElementById(`name-${data.pos}`);
+                const spotDisplay = document.getElementById(`spot-${data.pos}`);
+
+                if (displayField) {
+                    const nama = data.val.trim();
+                    displayField.textContent = nama === '' ? '-' : nama;
+
+                    if (spotDisplay) {
+                        if (nama !== '') {
+                            spotDisplay.classList.add('filled');
+                        } else {
+                            spotDisplay.classList.remove('filled');
+                        }
+                    }
+                }
+            });
+            
+            conn.on('close', () => {
+                statusText.textContent = 'DISCONNECTED';
+                statusText.style.color = '#e74c3c';
+            });
+        });
+    </script>
+</body>
+</html>
